@@ -1,0 +1,10 @@
+.env
+backend/build/
+backend/.gradle/
+backend/data/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+*.log
+.idea/
+
