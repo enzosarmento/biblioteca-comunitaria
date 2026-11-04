@@ -1,6 +1,13 @@
 # Sistema de Gestão de Acervo — Biblioteca Comunitária
 
 **Tema:** Biblioteca Comunitária — Catalogação, Disponibilidade e Localização Física de Obras  
+**Integrantes do Grupo:**
+- André Pardinho
+- Cauan Valadão
+- Enzo Sarmento
+- Pedro Magalhães
+- Ronaldo Porto
+
 **Data:** 31 de outubro de 2026  
 **Versão do documento:** 1.0  
 **Repositório / Diretório do projeto:** `projeto-biblioteca` ([README principal](../README.md) · [Planejamento e contrato](00-planejamento.md))
