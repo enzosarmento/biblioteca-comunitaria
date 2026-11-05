@@ -704,7 +704,7 @@ O *frontend* em `frontend/src/app/` adota integralmente a arquitetura moderna de
 - **`core/`**: artefatos transversais instanciados uma única vez na aplicação (`providedIn: 'root'`), compreendendo autenticação (`auth.service.ts`, `auth.guard.ts`, `auth.interceptor.ts`), contratos globais (`auth.model.ts`, `api-error.model.ts`) e serviços de infraestrutura visual (`notification.service.ts` e `confirm.service.ts`).
 - **`shared/`**: blocos reutilizáveis entre funcionalidades, incluindo `confirm-dialog.component.ts` (diálogo modal genérico do Angular Material) e `error-utils.ts` (tradução de erros de formulário e de falhas HTTP para mensagens em português).
 - **`layout/`**: `main-layout.component.ts`, responsável pela moldura autenticada com barra superior (`mat-toolbar`), atalhos de navegação, identificação do operador logado e botão **"Sair"**.
-- **`features/`**: páginas de negócio carregadas sob demanda (*lazy loading* via `loadComponent`), separadas em `login/` (`login.component.ts`) e `books/` (`book.model.ts`, `book.service.ts`, `book-form.component.ts`, `book-list.component.ts`, `book-create.component.ts`, `book-detail.component.ts` e `book-edit.component.ts`).
+- **`features/`**: páginas de negócio carregadas sob demanda (*lazy loading* via `loadComponent`), separadas em `login/` (`login.component.ts`), `forbidden/` (`forbidden.component.ts` — página de acesso negado/sem permissão) e `books/` (`book.model.ts`, `book.service.ts`, `book-form.component.ts`, `book-list.component.ts`, `book-create.component.ts`, `book-detail.component.ts` e `book-edit.component.ts`).
 
 ### 8.2 Mapa de Rotas e Fluxo de Navegação
 
@@ -713,6 +713,8 @@ Em `frontend/src/app/app.routes.ts`, a ordem de declaração das rotas filhas ga
 | Caminho Angular | Componente Carregado (`loadComponent`) | Guard Aplicado | Finalidade da Rota |
 |---|---|---|---|
 | `/login` | `LoginComponent` | `guestGuard` | Formulário de entrada; redireciona para `/books` caso o operador já esteja autenticado. |
+| `/forbidden` | `ForbiddenComponent` | — | Exibição de tela de Acesso Não Autorizado (HTTP 403) com botão para retornar à página principal (`/books`). |
+| `/acesso-negado` | Redireciona para `/forbidden` | — | Rota alternativa em português para tentativa de acesso a rotas sem permissão. |
 | `/` | Redireciona para `/books` (`pathMatch: 'full'`) | `authGuard` (rota-pai) | Ponto inicial padrão da área autenticada dentro de `MainLayoutComponent`. |
 | `/books` | `BookListComponent` | `authGuard` | Listagem tabular do acervo com busca reativa, indicadores de estoque e ações rápidas. |
 | `/books/new` | `BookCreateComponent` | `authGuard` | Tela de catalogação de novo livro reutilizando `BookFormComponent`. |

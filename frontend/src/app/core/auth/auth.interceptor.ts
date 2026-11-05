@@ -32,6 +32,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         );
         void router.navigate(['/login'], { queryParams: { returnUrl: router.url } });
       }
+
+      if (error.status === 403 && isApiCall) {
+        notify.error('Acesso negado: você não possui permissão para este recurso.');
+        void router.navigate(['/forbidden']);
+      }
       return throwError(() => error);
     }),
   );

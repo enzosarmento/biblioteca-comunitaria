@@ -9,6 +9,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/login/login.component').then((m) => m.LoginComponent),
   },
   {
+    path: 'forbidden',
+    title: 'Acesso Negado — Biblioteca Comunitária',
+    loadComponent: () =>
+      import('./features/forbidden/forbidden.component').then((m) => m.ForbiddenComponent),
+  },
+  {
+    path: 'acesso-negado',
+    redirectTo: 'forbidden',
+  },
+  {
     path: '',
     canActivate: [authGuard],
     loadComponent: () => import('./layout/main-layout.component').then((m) => m.MainLayoutComponent),

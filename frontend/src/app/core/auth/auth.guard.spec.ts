@@ -5,7 +5,7 @@ import { authGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
 describe('authGuard', () => {
-  it('redireciona para /login com returnUrl quando não autenticado', () => {
+  it('redireciona para /forbidden com returnUrl quando não autenticado', () => {
     const logoutSpy = vi.fn();
     TestBed.configureTestingModule({
       providers: [
@@ -26,7 +26,7 @@ describe('authGuard', () => {
 
     expect(logoutSpy).toHaveBeenCalledWith(false);
     expect(result instanceof UrlTree).toBe(true);
-    expect((result as UrlTree).toString()).toContain('/login');
+    expect((result as UrlTree).toString()).toContain('/forbidden');
   });
 
   it('permite navegação quando autenticado', () => {
