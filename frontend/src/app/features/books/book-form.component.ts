@@ -59,7 +59,14 @@ const notFutureDateValidator: ValidatorFn = (control: AbstractControl): Validati
 
           <mat-form-field appearance="outline">
             <mat-label>ISBN</mat-label>
-            <input matInput formControlName="isbn" placeholder="Ex.: 978-85-359-0277-8" />
+            <input
+              matInput
+              formControlName="isbn"
+              placeholder="Ex.: 978-85-359-0277-8"
+              maxlength="17"
+              (keydown)="onIsbnKeyDown($event)"
+              (input)="onIsbnInput($event)"
+            />
             @if (error('isbn'); as msg) {
               <mat-error>{{ msg }}</mat-error>
             }
@@ -278,6 +285,94 @@ export class BookFormComponent {
 
   showServerErrors(err: unknown): boolean {
     return applyServerFieldErrors(this.form, err);
+  }
+
+  protected onIsbnKeyDown(event: KeyboardEvent): void {
+    if (
+      event.key === 'Backspace' ||
+      event.key === 'Delete' ||
+      event.key === 'Tab' ||
+      event.key === 'Escape' ||
+      event.key === 'Enter' ||
+      event.key === 'ArrowLeft' ||
+      event.key === 'ArrowRight' ||
+      event.key === 'ArrowUp' ||
+      event.key === 'ArrowDown' ||
+      event.key === 'Home' ||
+      event.key === 'End' ||
+      event.ctrlKey ||
+      event.metaKey
+    ) {
+      if (event.key === 'Backspace') {
+        const input = event.target as HTMLInputElement;
+        const start = input.selectionStart ?? 0;
+        const end = input.selectionEnd ?? 0;
+        if (start === end && start > 1 && input.value[start - 1] === '-') {
+          event.preventDefault();
+          const val = input.value;
+          const newVal = val.slice(0, start - 2) + val.slice(start);
+          const formatted = this.formatIsbn(newVal);
+          input.value = formatted;
+          this.form.controls.isbn.setValue(formatted);
+          const newPos = Math.max(0, start - 2);
+          input.setSelectionRange(newPos, newPos);
+        }
+      }
+      return;
+    }
+
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  protected onIsbnInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const oldVal = input.value;
+    const oldPos = input.selectionEnd ?? oldVal.length;
+    const formatted = this.formatIsbn(oldVal);
+
+    if (formatted !== oldVal) {
+      input.value = formatted;
+      this.form.controls.isbn.setValue(formatted);
+
+      const digitsBefore = oldVal.slice(0, oldPos).replace(/\D/g, '').length;
+      let newPos = 0;
+      let counted = 0;
+      while (newPos < formatted.length && counted < digitsBefore) {
+        if (/\d/.test(formatted[newPos])) {
+          counted++;
+        }
+        newPos++;
+      }
+      input.setSelectionRange(newPos, newPos);
+    } else {
+      this.form.controls.isbn.setValue(formatted);
+    }
+  }
+
+  private formatIsbn(value: string): string {
+    const digits = value.replace(/\D/g, '');
+    if (!digits) return '';
+
+    if (digits.startsWith('978') || digits.startsWith('979') || digits.length > 10) {
+      const d = digits.slice(0, 13);
+      if (d.length <= 3) return d;
+      if (d.length <= 5) return `${d.slice(0, 3)}-${d.slice(3)}`;
+      if (d.length <= 8) return `${d.slice(0, 3)}-${d.slice(3, 5)}-${d.slice(5)}`;
+      if (d.length <= 12) return `${d.slice(0, 3)}-${d.slice(3, 5)}-${d.slice(5, 8)}-${d.slice(8)}`;
+      return `${d.slice(0, 3)}-${d.slice(3, 5)}-${d.slice(5, 8)}-${d.slice(8, 12)}-${d.slice(12, 13)}`;
+    }
+
+    if (digits.length <= 3 && ('978'.startsWith(digits) || '979'.startsWith(digits))) {
+      return digits;
+    }
+
+    const d = digits.slice(0, 10);
+    if (d.length <= 2) return d;
+    if (d.length <= 5) return `${d.slice(0, 2)}-${d.slice(2)}`;
+    if (d.length <= 9) return `${d.slice(0, 2)}-${d.slice(2, 5)}-${d.slice(5)}`;
+    return `${d.slice(0, 2)}-${d.slice(2, 5)}-${d.slice(5, 9)}-${d.slice(9, 10)}`;
   }
 
   protected submit(): void {

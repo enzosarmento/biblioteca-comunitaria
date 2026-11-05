@@ -57,4 +57,33 @@ describe('BookFormComponent', () => {
     expect(emitted[0].acquisitionDate).toBeNull();
     expect(emitted[0].synopsis).toBeNull();
   });
+
+  it('aplica mascara no ISBN adicionando hifens automaticamente ao digitar', () => {
+    const fixture = TestBed.createComponent(BookFormComponent);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input[formControlName="isbn"]') as HTMLInputElement;
+    input.value = '9788535902778';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(input.value).toBe('978-85-359-0277-8');
+    expect(fixture.componentInstance['form'].controls.isbn.value).toBe('978-85-359-0277-8');
+  });
+
+  it('bloqueia digitacao de letras no campo de ISBN', () => {
+    const fixture = TestBed.createComponent(BookFormComponent);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input[formControlName="isbn"]') as HTMLInputElement;
+    const keyEvent = new KeyboardEvent('keydown', { key: 'a', cancelable: true });
+    input.dispatchEvent(keyEvent);
+
+    expect(keyEvent.defaultPrevented).toBe(true);
+
+    const digitEvent = new KeyboardEvent('keydown', { key: '9', cancelable: true });
+    input.dispatchEvent(digitEvent);
+
+    expect(digitEvent.defaultPrevented).toBe(false);
+  });
 });
