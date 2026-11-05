@@ -76,16 +76,28 @@ import { BookService } from './book.service';
 
         <mat-card-actions align="end" class="detail-actions">
           <a mat-button routerLink="/books">
-            <mat-icon>arrow_back</mat-icon>
+            <mat-icon>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+              </svg>
+            </mat-icon>
             Voltar ao acervo
           </a>
           <a mat-stroked-button [routerLink]="['/books', b.id, 'edit']">
-            <mat-icon>edit</mat-icon>
+            <mat-icon>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+            </mat-icon>
             Editar
           </a>
-          <button mat-flat-button type="button" (click)="remove(b)">
-            <mat-icon>delete</mat-icon>
-            Excluir
+          <button mat-flat-button class="btn-danger" type="button" (click)="remove(b)">
+            <mat-icon>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+            </mat-icon>
+            Excluir obra
           </button>
         </mat-card-actions>
       </mat-card>
@@ -129,6 +141,13 @@ import { BookService } from './book.service';
     .detail-actions {
       gap: 0.5rem;
       margin-top: 0.75rem;
+    }
+    .btn-danger {
+      background-color: #d93025 !important;
+      color: #ffffff !important;
+    }
+    .btn-danger:hover {
+      background-color: #b3261e !important;
     }
   `,
 })

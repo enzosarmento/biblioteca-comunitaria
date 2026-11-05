@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   BehaviorSubject,
   catchError,
@@ -37,6 +38,7 @@ import { BookService } from './book.service';
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
+    MatTooltipModule,
   ],
   template: `
     <div class="page-header">
@@ -109,22 +111,53 @@ import { BookService } from './book.service';
             </ng-container>
 
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <th mat-header-cell *matHeaderCellDef class="actions-header">Ações</th>
               <td mat-cell *matCellDef="let b" class="actions-cell">
-                <a mat-icon-button [routerLink]="['/books', b.id]" aria-label="Ver detalhes">
-                  <mat-icon>visibility</mat-icon>
-                </a>
-                <a mat-icon-button [routerLink]="['/books', b.id, 'edit']" aria-label="Editar livro">
-                  <mat-icon>edit</mat-icon>
-                </a>
-                <button
-                  mat-icon-button
-                  type="button"
-                  (click)="remove(b)"
-                  aria-label="Excluir livro"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
+                <div class="actions-group">
+                  <a
+                    mat-stroked-button
+                    class="btn-action btn-view"
+                    [routerLink]="['/books', b.id]"
+                    matTooltip="Visualizar detalhes da obra"
+                    aria-label="Visualizar detalhes"
+                  >
+                    <mat-icon>
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                      </svg>
+                    </mat-icon>
+                    <span>Ver</span>
+                  </a>
+                  <a
+                    mat-stroked-button
+                    class="btn-action btn-edit"
+                    [routerLink]="['/books', b.id, 'edit']"
+                    matTooltip="Editar dados da obra"
+                    aria-label="Editar livro"
+                  >
+                    <mat-icon>
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                      </svg>
+                    </mat-icon>
+                    <span>Editar</span>
+                  </a>
+                  <button
+                    mat-flat-button
+                    class="btn-action btn-delete"
+                    type="button"
+                    (click)="remove(b)"
+                    matTooltip="Excluir obra do acervo"
+                    aria-label="Excluir livro"
+                  >
+                    <mat-icon>
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                      </svg>
+                    </mat-icon>
+                    <span>Excluir</span>
+                  </button>
+                </div>
               </td>
             </ng-container>
 
@@ -198,6 +231,51 @@ import { BookService } from './book.service';
     }
     .actions-cell {
       white-space: nowrap;
+    }
+    .actions-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-action {
+      font-size: 0.8rem;
+      padding: 0 0.65rem !important;
+      height: 32px !important;
+      line-height: 32px !important;
+      border-radius: 6px !important;
+      font-weight: 500;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+    .btn-action mat-icon {
+      margin-right: 4px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-view {
+      color: #0b57d0 !important;
+      border-color: #c2e7ff !important;
+    }
+    .btn-view:hover {
+      background-color: #e8f0fe !important;
+    }
+    .btn-edit {
+      color: #444746 !important;
+      border-color: #dadce0 !important;
+    }
+    .btn-edit:hover {
+      color: #1f1f1f !important;
+      background-color: #f1f3f4 !important;
+    }
+    .btn-delete {
+      background-color: #d93025 !important;
+      color: #ffffff !important;
+    }
+    .btn-delete:hover {
+      background-color: #b3261e !important;
     }
     .state-card {
       padding: 1.5rem;
